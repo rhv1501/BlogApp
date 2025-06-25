@@ -22,9 +22,9 @@ export async function POST(request) {
   const image = formData.get("image");
   const imageByte = await image.arrayBuffer();
   const imageBuffer = Buffer.from(imageByte);
-  const path = `./public/${timeStamp}_${image.name}`;
+  const path = `./public/uploads/blogs/${timeStamp}_${image.name}`;
   await writeFile(path, imageBuffer);
-  const imageUrl = `/${timeStamp}_${image.name}`;
+  const imageUrl = `uploads/blogs/${timeStamp}_${image.name}`;
   const blogData = {
     title: formData.get("title"),
     description: formData.get("description"),
