@@ -6,7 +6,7 @@ const Bloglist = () => {
   const [menu, setMenu] = useState("All");
   return (
     <div>
-      <div className="flex justify-center gap-6 my-10">
+      <div className="flex justify-center gap-6 my-10 flex-wrap">
         <button
           onClick={() => {
             setMenu("All");
@@ -19,15 +19,15 @@ const Bloglist = () => {
         </button>
         <button
           onClick={() => {
-            setMenu("Technology");
+            setMenu("Consumer Electronics");
           }}
           className={`${
-            menu === "Technology"
+            menu === "Consumer Electronics"
               ? "bg-black text-white py-1 px-4 roounded-sm"
               : null
           } cursor-pointer`}
         >
-          Technology
+          Consumer Electronics
         </button>
         <button
           onClick={() => {
@@ -43,15 +43,61 @@ const Bloglist = () => {
         </button>
         <button
           onClick={() => {
-            setMenu("Lifestyle");
+            setMenu("Technology");
           }}
           className={`${
-            menu === "Lifestyle"
+            menu === "Technology"
               ? "bg-black text-white py-1 px-4 roounded-sm"
               : null
           } cursor-pointer`}
         >
-          Lifestyle
+          Technology
+        </button>
+        <button
+          onClick={() => {
+            setMenu("Development");
+          }}
+          className={`${
+            menu === "Development"
+              ? "bg-black text-white py-1 px-4 roounded-sm"
+              : null
+          } cursor-pointer`}
+        >
+          Development
+        </button>
+        <button
+          onClick={() => {
+            setMenu("Devops");
+          }}
+          className={`${
+            menu === "Devops"
+              ? "bg-black text-white py-1 px-4 roounded-sm"
+              : null
+          } cursor-pointer`}
+        >
+          Devops
+        </button>
+        <button
+          onClick={() => {
+            setMenu("AI");
+          }}
+          className={`${
+            menu === "AI" ? "bg-black text-white py-1 px-4 roounded-sm" : null
+          } cursor-pointer`}
+        >
+          AI
+        </button>
+        <button
+          onClick={() => {
+            setMenu("Design");
+          }}
+          className={`${
+            menu === "Design"
+              ? "bg-black text-white py-1 px-4 roounded-sm"
+              : null
+          } cursor-pointer`}
+        >
+          Design
         </button>
       </div>
       <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">

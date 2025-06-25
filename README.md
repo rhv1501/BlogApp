@@ -1,15 +1,31 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Prerequisites
 
-First, run the development server:
+This project uses [pnpm](https://pnpm.io/) as the package manager. If you don't have pnpm installed, you can install it globally:
 
 ```bash
+npm install -g pnpm
+# or
+corepack enable
+```
+
+## Getting Started
+
+First, install the dependencies:
+
+```bash
+pnpm install
+```
+
+Then, run the development server:
+
+```bash
+pnpm dev
+# or
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
 # or
 bun dev
 ```
@@ -28,6 +44,22 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Available Scripts
+
+This project includes the following pnpm scripts:
+
+- `pnpm dev` - Start the development server with Turbopack
+- `pnpm build` - Build the application for production
+- `pnpm start` - Start the production server
+- `pnpm lint` - Run ESLint to check for code issues
+
+## Package Management with pnpm
+
+- `pnpm add <package>` - Add a new dependency
+- `pnpm add -D <package>` - Add a new dev dependency
+- `pnpm remove <package>` - Remove a dependency
+- `pnpm update` - Update all dependencies
 
 ## Deploy on Vercel
 
