@@ -1,8 +1,29 @@
 import { blog_data } from "@/assets/assets";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Blogitem from "./Blogitem";
+import { toast } from "react-toastify";
 
 const Bloglist = () => {
+  const [Blogs, setBlogs] = useState([]);
+
+  const fetchblogs = async () => {
+    try {
+      const response = await fetch("/api/blog");
+      if (!response.ok) {
+        toast.error(res.data.message);
+        return;
+      }
+      toast.success("Blogs fetched successfully");
+      const data = await response.json();
+      setBlogs(data.blogs);
+    } catch (error) {
+      toast.error("Failed to fetch blogs");
+      console.error("Error fetching blogs:", error);
+    }
+  };
+  useEffect(() => {
+    fetchblogs();
+  }, []);
   const [menu, setMenu] = useState("All");
   return (
     <div>
@@ -101,17 +122,17 @@ const Bloglist = () => {
         </button>
       </div>
       <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">
-        {blog_data
+        {Blogs
           .filter((item) => (menu === "All" ? true : item.category === menu))
           .map((item) => {
             return (
               <Blogitem
-                key={item.id}
+                key={item._id}
                 title={item.title}
                 description={item.description}
                 category={item.category}
                 image={item.image}
-                id={item.id}
+                id={item._id}
               />
             );
           })}

@@ -1,10 +1,17 @@
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import Link from "next/link";
-
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import "highlight.js/styles/github.css";
+import rehypeHighlight from "rehype-highlight";
+import Markdown from "./Markdown";
+import { getExcerpt } from "@/lib/utils/getExcerpt";
 const Blogitem = ({ title, description, category, image, id }) => {
   return (
-    <div className="max-w-[330px] sm:max-w-[300px] bg-white border border-black hover:shadow-[-7px_7px_0px_#000] transition-shadow duration-500 ease-in-out">
+    <div className="max-w-[330px] sm:max-w-[300px] bg-white border border-black hover:shadow-[-7px_7px_0px_#000] transition-shadow duration-500 ease-in-out overflow-x-auto">
       <Link href={`blogs/${id}`}>
         <Image
           src={image}
@@ -22,8 +29,8 @@ const Blogitem = ({ title, description, category, image, id }) => {
         <h5 className="mb-2 text-l font-medium tracking-tight text-gray-900 ">
           {title}
         </h5>
-        <p className="mb-3 text-sm tracking-tight text-gray-700">
-          {description}
+        <p className="text-gray-700 text-sm mb-4">
+          {getExcerpt(description, 150)}
         </p>
         <Link href={`blogs/${id}`}>
           <div className="inline-flex items-center py-2 font-semibold text-center">
