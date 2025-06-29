@@ -1,28 +1,22 @@
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize from "rehype-sanitize";
 import "highlight.js/styles/github.css";
-import rehypeHighlight from "rehype-highlight";
-import Markdown from "./Markdown";
 import { getExcerpt } from "@/lib/utils/getExcerpt";
 const Blogitem = ({ title, description, category, image, id }) => {
   return (
-    <div className="max-w-[330px] sm:max-w-[300px] bg-white border border-black hover:shadow-[-7px_7px_0px_#000] transition-shadow duration-500 ease-in-out overflow-x-auto">
+    <div className="max-w-[330px] sm:max-w-[300px] rounded-md bg-white border border-black hover:shadow-[-7px_7px_0px_#000] transition-shadow duration-500 ease-in-out overflow-x-auto">
       <Link href={`blogs/${id}`}>
         <Image
           src={image}
           alt="featured image"
           width={400}
           height={400}
-          className="border-b border-black"
+          className="border-b border-black p-1"
         />
       </Link>
 
-      <p className="ml-5 mt-5 px-1 inline-block bg-black text-white text-sm">
+      <p className="ml-5 mt-5 p-1 inline-block bg-black text-white text-sm rounded-md">
         {category}
       </p>
       <div className="p-5">
