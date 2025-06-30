@@ -3,7 +3,9 @@ import { Suspense } from "react";
 
 const page = () => {
   const BlogList = dynamic(() =>
-    import("@/components/AdminComponents/Bloglist", { loading: <Loading /> })
+    import("@/components/AdminComponents/Bloglist", {
+      loading: <Loading />,
+    })
   );
   return (
     <Suspense fallback={<Loading />}>

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 const Backbutton = () => {
   const pathname = usePathname();
   return pathname !== "/admin" ? (
-    <Link href="/admin" className="md:hidden">
+    <Link href="/admin" className="lg:hidden">
       <IoMdArrowRoundBack className="cursor-pointer" size={30} />
     </Link>
   ) : null;

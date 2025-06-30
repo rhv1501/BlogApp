@@ -47,7 +47,7 @@ const page = () => {
       <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
     </div>
   ) : (
-    <div className="flex-1 pt-5 sm:pt-12 md:px-16 px-4">
+    <div className="flex-1 pt-5 sm:pt-12 lg:px-16 px-4">
       <h1 className="font-bold text-xl">All Blogs</h1>
       <div className="realticve h-[80vh] max-w-[850px] overflow-x-auto mt-4 border border-gray-400 scrollbar-hide">
         <table className="w-full text-sm text-gray-500 ">

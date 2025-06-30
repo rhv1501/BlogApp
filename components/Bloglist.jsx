@@ -1,9 +1,8 @@
-import { blog_data } from "@/assets/assets";
-import React, { useEffect, useState } from "react";
-import Blogitem from "./Blogitem";
+import React, { Suspense, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Bloglist = () => {
+  const Blogitem = React.lazy(() => import("@/components/Blogitem"));
   const [Blogs, setBlogs] = useState([]);
 
   const fetchblogs = async () => {
@@ -122,10 +121,11 @@ const Bloglist = () => {
         </button>
       </div>
       <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">
-        {Blogs
-          .filter((item) => (menu === "All" ? true : item.category === menu))
-          .map((item) => {
-            return (
+        {Blogs.filter((item) =>
+          menu === "All" ? true : item.category === menu
+        ).map((item) => {
+          return (
+            <Suspense fallback={<Loading />} key={item._id}>
               <Blogitem
                 key={item._id}
                 title={item.title}
@@ -134,11 +134,19 @@ const Bloglist = () => {
                 image={item.image}
                 id={item._id}
               />
-            );
-          })}
+            </Suspense>
+          );
+        })}
       </div>
     </div>
   );
 };
 
 export default Bloglist;
+const Loading = () => {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-black"></div>
+    </div>
+  );
+};
