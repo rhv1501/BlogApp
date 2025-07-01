@@ -1,4 +1,3 @@
-import { assets } from "@/assets/assets";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Suspense } from "react";
@@ -17,7 +16,7 @@ export default function Layout({ children }) {
             <div className="flex items-center justify-between w-full py-3 max-h-[60px] px-12 border-b border-black">
               <Backbutton />
               <h3 className="font-medium ">Admin Pannel</h3>
-              <Image src={assets.profile_icon} width={40} alt="profile" />
+              <Image src={"/author.png"} width={40} height={40} alt="profile" className="rounded-full"/>
             </div>
             {children}
           </div>
