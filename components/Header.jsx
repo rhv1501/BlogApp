@@ -35,10 +35,14 @@ const Header = () => {
           alt="logo"
           className="w-[130px] sm:w-auto"
         />
-        <button className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-solid border-black shadow-[-7px_7px_0px_#000]">
-          Get Started
+        <a
+          href="https://www.rhv1501.me"
+          target="_blank"
+          className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-solid border-black shadow-[-7px_7px_0px_#000]"
+        >
+          Visit author
           <Image src={assets.arrow} alt="an arrow" />
-        </button>
+        </a>
       </div>
       <div className="text-center my-8">
         <h1 className="text-3xl sm:text-5xl font-medium">Latest Blog</h1>
