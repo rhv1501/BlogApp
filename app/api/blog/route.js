@@ -1,22 +1,26 @@
 import connectDB from "@/lib/config/db";
 import { blogModel } from "@/lib/config/models/blogModel";
+import { uploadToBlob } from "@/lib/utils/blob";
 import { enqueueEmailJob } from "@/lib/utils/Rabbit";
 import { writeFile } from "fs/promises";
 const fs = require("fs");
 const { NextResponse } = require("next/server");
 
-
 export async function POST(request) {
   try {
-  await connectDB();
+    await connectDB();
     const formData = await request.formData();
-    const timeStamp = Date.now();
     const image = formData.get("image");
-    const imageByte = await image.arrayBuffer();
-    const imageBuffer = Buffer.from(imageByte);
-    const path = `./public/uploads/blogs/${timeStamp}_${image.name}`;
-    await writeFile(path, imageBuffer);
-    const imageUrl = `/uploads/blogs/${timeStamp}_${image.name}`;
+    let imageUrl = "";
+    if (image) {
+      imageUrl = await uploadToBlob(image, "blogs");
+      if (!imageUrl) {
+        return NextResponse.json(
+          { success: "false", message: "Failed to upload image" },
+          { status: 500 }
+        );
+      }
+    }
     const blogData = {
       title: formData.get("title"),
       description: formData.get("description"),
