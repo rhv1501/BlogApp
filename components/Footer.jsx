@@ -1,3 +1,4 @@
+"use client";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
@@ -10,9 +11,23 @@ const Footer = () => {
         &copy; {new Date().getFullYear()} Rudresh H Vyas. All rights reserved.
       </p>
       <div className="flex">
-        <FaInstagram color="white" width={50} />
-        <FaGithub color="white" width={50} className="ml-4" />
-        <FaLinkedin color="white" width={50} className="ml-4" />
+        <button
+          className="cursor-pointer"
+          onClick={() =>
+            window.open("https://www.instagram.com/rudresh_vyas_", "_blank")
+          }
+        >
+          <FaInstagram color="white" width={50} />
+        </button>
+        <button
+          className="cursor-pointer"
+          onClick={() => window.open("https://github.com/rhv1501", "_blank")}
+        >
+          <FaGithub color="white" width={50} className="ml-4" />
+        </button>
+        <button className="cursor-pointer" onClick={() => window.open("https://www.linkedin.com/in/rudresh-h-vyas/", "_blank")}>
+          <FaLinkedin color="white" width={50} className="ml-4" />
+        </button>
       </div>
     </div>
   );
