@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { verifyOtp } from "@/lib/utils/otpstore";
 import { signToken } from "@/lib/utils/jwt";
-import cookie from "cookie";
+import { serialize } from "cookie";
 
 export async function POST(req) {
   const { email, otp } = await req.json();
 
-  if (email !== process.env.EMAIL|| !verifyOtp(email, otp)) {
+  if (email !== process.env.EMAIL || !verifyOtp(email, otp)) {
     return NextResponse.json({ error: "Invalid OTP" }, { status: 401 });
   }
 
@@ -14,7 +14,7 @@ export async function POST(req) {
 
   return new NextResponse(JSON.stringify({ success: true }), {
     headers: {
-      "Set-Cookie": cookie.serialize("token", token, {
+      "Set-Cookie": serialize("token", token, {
         httpOnly: true,
         maxAge: 3600,
         path: "/",

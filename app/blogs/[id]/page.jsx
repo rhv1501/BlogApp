@@ -1,85 +1,94 @@
-"use client";
 import { assets } from "@/assets/assets";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, use } from "react";
-import { toast } from "react-toastify";
 import Markdown from "@/components/Markdown";
-const Page = ({ params }) => {
-  const { id } = use(params);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+import connectDB from "@/lib/config/db";
+import { blogModel } from "@/lib/config/models/blogModel";
+import { notFound } from "next/navigation";
+import removeMarkdown from "remove-markdown";
+import ShareButtons from "@/components/ShareButtons";
 
-  const fetchBlogData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/blog?id=${id}`);
-      const result = await response.json();
+// ✅ Generate metadata using direct DB access
+export async function generateMetadata({ params }) {
+  try {
+    const { id } = await params;
+    await connectDB();
+    const blog = await blogModel.findById(id).lean();
 
-      if (result.success === "true" && result.blog) {
-        setData(result.blog);
-      } else {
-        setError(true);
-        toast.error(result.message || "Blog not found");
-        console.error("Error fetching blog data:", result.message);
-      }
-    } catch (error) {
-      setError(true);
-      toast.error("An error occurred while fetching blog data");
-      console.error("Error fetching blog data:", error);
-    } finally {
-      setLoading(false);
+    if (!blog) {
+      return {
+        title: "Blog Not Found",
+        description: "The requested blog post could not be found.",
+      };
     }
-  };
 
-  useEffect(() => {
-    fetchBlogData();
-  }, [id]);
+    const excerpt =
+      removeMarkdown(blog.description || "")
+        .substring(0, 160)
+        .trim() + (blog.description?.length > 160 ? "..." : "");
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-t-blue-500 border-gray-200 rounded-full animate-spin"></div>
-        <p className="mt-4 text-lg">Loading blog...</p>
-      </div>
-    );
+    return {
+      title: blog.title,
+      description: excerpt,
+      openGraph: {
+        title: blog.title,
+        description: excerpt,
+        images: [
+          { url: blog.image, width: 1200, height: 630, alt: blog.title },
+        ],
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: blog.title,
+        description: excerpt,
+        images: [blog.image],
+      },
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Blog Post",
+      description: "Read the latest blog post",
+    };
   }
+}
 
-  // Error state - Blog not found
-  if (error || !data) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-        <Image
-          src={assets.logo}
-          width={180}
-          height={60}
-          alt="logo"
-          className="mb-8"
-        />
-        <h1 className="text-3xl font-bold mb-4">Blog Not Available</h1>
-        <p className="text-lg text-gray-600 mb-8 max-w-md">
-          Sorry, the blog post you're looking for couldn't be found or may have
-          been removed.
-        </p>
-        <Link
-          href="/"
-          className="bg-black text-white px-8 py-3 rounded-md hover:bg-gray-800 transition-colors"
-        >
-          Back to Home
-        </Link>
-      </div>
-    );
+// ✅ Direct database access function
+async function getBlogPost(id) {
+  try {
+    await connectDB();
+    const blog = await blogModel.findById(id).lean();
+
+    if (!blog) {
+      notFound(); // This will show your 404 page
+    }
+
+    // Convert MongoDB objects to plain objects
+    return {
+      ...blog,
+      _id: blog._id.toString(),
+      date: blog.date?.toISOString() || new Date().toISOString(),
+      createdAt: blog.createdAt?.toISOString() || new Date().toISOString(),
+      updatedAt: blog.updatedAt?.toISOString() || new Date().toISOString(),
+    };
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    notFound();
   }
+}
 
-  // Blog post found - render normal content
+// ✅ Server-side rendered page component
+export default async function BlogPage({ params }) {
+  const { id } = await params;
+  const data = await getBlogPost(id);
+
   return (
     <>
       <div className="bg-gray-200 py-5 px-5 md:px-12 lg:px-28">
         <div className="flex justify-between items-center">
-          <Link href={"/"}>
+          <Link href="/">
             <Image
               src={assets.logo}
               width={180}
@@ -96,14 +105,14 @@ const Page = ({ params }) => {
             {data.title}
           </h1>
           <Image
-            src={data.authorImg}
+            src={data.authorImg || assets.profile_icon}
             width={60}
             height={60}
             alt="author image"
             className="mx-auto mt-6 border border-white rounded-full"
           />
           <p className="mt-1 pb-2 text-lg max-w-[740px] mx-auto">
-            {data.author}
+            {data.author || "Rudresh H Vyas"}
           </p>
         </div>
       </div>
@@ -113,26 +122,27 @@ const Page = ({ params }) => {
           src={data.image}
           width={1280}
           height={720}
-          alt="featured image"
+          alt={`Featured image for ${data.title}`}
           className="border-4 border-white"
+          priority
         />
-        <h1 className="my-8 text-[26px] font-semibold">Introduction</h1>
 
-        <Markdown content={data.description} />
+        <article>
+          <h2 className="my-8 text-[26px] font-semibold">Introduction</h2>
+          <Markdown content={data.description} />
+        </article>
 
-        <div className="my-24">
-          <p className="text-black font-semibold my-4">
-            Share this article on social media
-          </p>
-          <div className="flex">
-            <Image src={assets.facebook_icon} alt="social logo" />
-            <Image src={assets.twitter_icon} alt="social logo" />
-            <Image src={assets.googleplus_icon} alt="social logo" />
-          </div>
-        </div>
+        {/* Fixed share buttons */}
+        <ShareButtons
+          title={data.title}
+          url={`${
+            process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+          }/blogs/${id}`}
+        />
       </div>
+
       <div className="mx-5 max-w-[800px] md:mx-auto mt-10 mb-20 bg-gray-200 px-5 py-2 rounded-2xl">
-        <h3 className="my-5 txt-[17px] font-semibold animate-pulse">
+        <h3 className="my-5 text-[17px] font-semibold animate-pulse">
           Want the latest tech buzz delivered straight to your inbox?
         </h3>
         <p className="my-3">
@@ -142,9 +152,8 @@ const Page = ({ params }) => {
           The future of tech, delivered straight to your inbox.
         </p>
       </div>
+
       <Footer />
     </>
   );
-};
-
-export default Page;
+}

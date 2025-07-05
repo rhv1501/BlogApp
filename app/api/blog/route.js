@@ -1,5 +1,6 @@
 import connectDB from "@/lib/config/db";
 import { blogModel } from "@/lib/config/models/blogModel";
+import { enqueueEmailJob } from "@/lib/utils/Rabbit";
 import { writeFile } from "fs/promises";
 const fs = require("fs");
 const { NextResponse } = require("next/server");
@@ -28,6 +29,7 @@ export async function POST(request) {
       image: imageUrl,
     };
     await blogModel.create(blogData);
+    enqueueEmailJob(blogData);
     console.log("blogData", blogData);
     return NextResponse.json(
       { success: "true", message: "Blog Added successfully" },

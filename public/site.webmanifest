@@ -1,0 +1,16 @@
+{
+  "name": "Rudresh Vyas Blog",
+  "short_name": "RV Blog",
+  "description": "From terminal to text — decoding tech with Rudresh",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

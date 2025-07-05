@@ -1,5 +1,6 @@
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -9,9 +10,9 @@ const Footer = () => {
         &copy; {new Date().getFullYear()} Rudresh H Vyas. All rights reserved.
       </p>
       <div className="flex">
-        <Image src={assets.facebook_icon} alt="facbooklogo" width={40} />
-        <Image src={assets.twitter_icon} alt="facbooklogo" width={40} />
-        <Image src={assets.googleplus_icon} alt="facbooklogo" width={40} />
+        <FaInstagram color="white" width={50} />
+        <FaGithub color="white" width={50} className="ml-4" />
+        <FaLinkedin color="white" width={50} className="ml-4" />
       </div>
     </div>
   );

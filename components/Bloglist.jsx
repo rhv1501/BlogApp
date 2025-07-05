@@ -1,3 +1,4 @@
+"use client";
 import React, { Suspense, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 

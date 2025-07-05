@@ -10,8 +10,69 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  title: "Blog | Rudresh H Vyas",
-  description: "Personal blog of Rudresh H Vyas",
+  title: {
+    default: "Blog | Rudresh H Vyas",
+    template: "%s | Rudresh H Vyas",
+  },
+  description:
+    "Personal blog of Rudresh H Vyas covering technology, programming, web development, and software engineering insights.",
+  keywords: [
+    "blog",
+    "technology",
+    "programming",
+    "web development",
+    "software engineering",
+    "Rudresh Vyas",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "your-google-verification-code", // Replace with your actual verification code
+  },
+  alternates: {
+    canonical:
+      process.env.NEXT_PUBLIC_BASE_URL || "https://blog.rudreshvyas.com",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://blog.rudreshvyas.com",
+    siteName: "Rudresh H Vyas Blog",
+    title: "Blog | Rudresh H Vyas",
+    description:
+      "Personal blog of Rudresh H Vyas covering technology, programming, web development, and software engineering insights.",
+    images: [
+      {
+        url: "/og-image.jpg", // You'll need to add this image
+        width: 1200,
+        height: 630,
+        alt: "Rudresh H Vyas Blog",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Rudresh H Vyas",
+    description:
+      "Personal blog of Rudresh H Vyas covering technology, programming, web development, and software engineering insights.",
+    images: ["/og-image.jpg"],
+    creator: "@rhv1501",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({ children }) {
