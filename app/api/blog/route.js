@@ -5,13 +5,10 @@ import { writeFile } from "fs/promises";
 const fs = require("fs");
 const { NextResponse } = require("next/server");
 
-const laodDb = async () => {
-  await connectDB();
-};
-laodDb();
 
 export async function POST(request) {
   try {
+  await connectDB();
     const formData = await request.formData();
     const timeStamp = Date.now();
     const image = formData.get("image");
@@ -44,6 +41,7 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  await connectDB();
   const blogId = request.nextUrl.searchParams.get("id");
   if (blogId) {
     console.log(blogId);
@@ -89,6 +87,7 @@ export async function GET(request) {
 }
 
 export async function DELETE(request) {
+  await connectDB();
   const blogId = request.nextUrl.searchParams.get("id");
   if (!blogId) {
     return NextResponse.json(
@@ -133,6 +132,7 @@ export async function DELETE(request) {
 }
 
 export async function PUT(request) {
+  await connectDB();
   const formData = await request.formData();
   const blogId = request.nextUrl.searchParams.get("id");
   if (!blogId) {

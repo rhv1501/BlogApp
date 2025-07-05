@@ -9,7 +9,6 @@ import { notFound } from "next/navigation";
 import removeMarkdown from "remove-markdown";
 import ShareButtons from "@/components/ShareButtons";
 
-// ✅ Generate metadata using direct DB access
 export async function generateMetadata({ params }) {
   try {
     const { id } = await params;
@@ -55,7 +54,6 @@ export async function generateMetadata({ params }) {
   }
 }
 
-// ✅ Direct database access function
 async function getBlogPost(id) {
   try {
     await connectDB();
@@ -79,7 +77,6 @@ async function getBlogPost(id) {
   }
 }
 
-// ✅ Server-side rendered page component
 export default async function BlogPage({ params }) {
   const { id } = await params;
   const data = await getBlogPost(id);
@@ -132,7 +129,6 @@ export default async function BlogPage({ params }) {
           <Markdown content={data.description} />
         </article>
 
-        {/* Fixed share buttons */}
         <ShareButtons
           title={data.title}
           url={`${

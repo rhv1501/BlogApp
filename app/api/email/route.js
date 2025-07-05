@@ -2,13 +2,10 @@ import connectDB from "@/lib/config/db";
 import EmailModel from "@/lib/config/models/EmailModel";
 import { NextResponse } from "next/server";
 
-const loadDb = async () => {
-  await connectDB();
-};
-loadDb();
 
 export async function POST(request) {
   try {
+  await connectDB();
     const formData = await request.formData();
     const emailData = {
       email: `${formData.get("email")}`,
@@ -39,6 +36,7 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  await connectDB();
   try {
     const emails = await EmailModel.find({});
     return NextResponse.json(
