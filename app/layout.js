@@ -36,7 +36,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code", // Replace with your actual verification code
+    google: "_me4aiBwRUNy1Sm33R3EBj7aT4Ff8EAS3Uw0EdBy3d0",
   },
   alternates: {
     canonical:
