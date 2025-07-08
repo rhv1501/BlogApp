@@ -1,9 +1,7 @@
 import connectDB from "@/lib/config/db";
 import { blogModel } from "@/lib/config/models/blogModel";
-import { uploadToBlob } from "@/lib/utils/blob";
+import { deleteFromBlob, uploadToBlob } from "@/lib/utils/blob";
 import { enqueueEmailJob } from "@/lib/utils/Rabbit";
-import { writeFile } from "fs/promises";
-const fs = require("fs");
 const { NextResponse } = require("next/server");
 
 export async function POST(request) {
@@ -107,18 +105,19 @@ export async function DELETE(request) {
         { status: 404 }
       );
     }
-    fs.unlink(`./public${deletedBlog.image}`, (err) => {
-      if (err) {
-        return NextResponse.json(
-          {
-            success: "false",
-            message: "failed to delete  image from server",
-            error: err.message,
-          },
-          { status: 500 }
-        );
-      }
-    });
+    if (!deletedBlog.image) {
+      return NextResponse.json(
+        { success: "false", message: "error deleting blog" },
+        { status: 500 }
+      );
+    }
+    const del = await deleteFromBlob(deletedBlog.image);
+    if (!del) {
+      return NextResponse.json(
+        { success: "false", message: "Failed to delete old image" },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
       { success: "true", message: "Blog deleted successfully" },
       { status: 200 }
@@ -160,24 +159,21 @@ export async function PUT(request) {
           { status: 404 }
         );
       }
-      fs.unlink(`./public${blog.image}`, (err) => {
-        if (err) {
-          return NextResponse.json(
-            {
-              success: "false",
-              message: "failed to delete  image from server",
-              error: err.message,
-            },
-            { status: 500 }
-          );
-        }
-      });
-      const timeStamp = Date.now();
-      const imageByte = await image.arrayBuffer();
-      const imageBuffer = Buffer.from(imageByte);
-      const path = `./public/uploads/blogs/${timeStamp}_${image.name}`;
-      await writeFile(path, imageBuffer);
-      blogData.image = `/uploads/blogs/${timeStamp}_${image.name}`;
+      const imageurl = await uploadToBlob(image, "blogs");
+      if (!imageurl) {
+        return NextResponse.json(
+          { success: "false", message: "Failed to upload image" },
+          { status: 500 }
+        );
+      }
+      const del = await deleteFromBlob(blog.image);
+      if (!del) {
+        return NextResponse.json(
+          { success: "false", message: "Failed to delete old image" },
+          { status: 500 }
+        );
+      }
+      blogData.image = imageurl;
     }
     const updatedBlog = await blogModel.findByIdAndUpdate(blogId, blogData, {
       new: true,

@@ -39,20 +39,19 @@ export const metadata = {
     google: "_me4aiBwRUNy1Sm33R3EBj7aT4Ff8EAS3Uw0EdBy3d0",
   },
   alternates: {
-    canonical:
-      process.env.NEXT_PUBLIC_BASE_URL || "https://blog.rudreshvyas.com",
+    canonical: process.env.NEXT_PUBLIC_BASE_URL || "https://blog.rhv1501.me",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://blog.rudreshvyas.com",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://blog.rhv1501.me",
     siteName: "Rudresh H Vyas Blog",
     title: "Blog | Rudresh H Vyas",
     description:
       "Personal blog of Rudresh H Vyas covering technology, programming, web development, and software engineering insights.",
     images: [
       {
-        url: "/og-image.jpg", // You'll need to add this image
+        url: "/og-image.png", // You'll need to add this image
         width: 1200,
         height: 630,
         alt: "Rudresh H Vyas Blog",
@@ -64,7 +63,7 @@ export const metadata = {
     title: "Blog | Rudresh H Vyas",
     description:
       "Personal blog of Rudresh H Vyas covering technology, programming, web development, and software engineering insights.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
     creator: "@rhv1501",
   },
   icons: {
