@@ -5,12 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize from "rehype-sanitize";
 import "highlight.js/styles/github.css";
-import rehypeHighlight from "rehype-highlight";
 import Markdown from "@/components/Markdown";
 
 const AddBlog = () => {
@@ -28,8 +23,45 @@ const AddBlog = () => {
     author: "Rudresh H Vyas",
     authorImg: "/author.png",
   });
+  const [generating, setGenerating] = useState(false);
 
-  // Create preview URL when image changes
+  const generate = async () => {
+    if (generating) return;
+
+    setGenerating(true);
+    toast.loading("Generating blog content, please wait...");
+    try {
+      const response = await fetch("/api/ai/generateBlog", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: data.description,
+        }),
+      });
+      setData((prev) => ({ ...prev, description: "" }));
+      toast.dismiss();
+      if (!response.ok) {
+        toast.error("Failed to generate blog content");
+        return;
+      }
+      const result = await response.json();
+      if (result.success) {
+        setData((prev) => ({
+          ...prev,
+          description: result.content,
+        }));
+        toast.success("Blog content generated successfully");
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.error("Failed to connect to AI service");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   useEffect(() => {
     if (image) {
       const url = URL.createObjectURL(image);
@@ -44,7 +76,6 @@ const AddBlog = () => {
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Toggle markdown preview
   const togglePreview = () => {
     setPreviewMarkdown(!previewMarkdown);
   };
@@ -248,15 +279,41 @@ const AddBlog = () => {
               <Markdown content={data.description} />
             </div>
           ) : (
-            <textarea
-              className="w-full px-4 py-3 border rounded font-mono"
-              name="description"
-              value={data.description}
-              onChange={handleChange}
-              placeholder="Your description goes here (supports Markdown)"
-              rows={6}
-              required
-            />
+            <div>
+              <p className="text-sm text-gray-500 mb-2">
+                Not Sure of what to write ? explain you idea briefly here
+                (atleast 10 characters) or leave it empty the ai will select the
+                topic on its own and click generate to let the ai write the blog
+                for you.{" "}
+                <button
+                  type="button"
+                  onClick={generate}
+                  disabled={
+                    generating ||
+                    (data.description.trim().length < 10 &&
+                      data.description != 0)
+                  }
+                  className={`font-bold text-md border p-1 rounded-lg transition-colors duration-300 ${
+                    generating ||
+                    (data.description.trim().length < 10 &&
+                      data.description != 0)
+                      ? "bg-gray-400 text-gray-600 border-gray-400 cursor-not-allowed"
+                      : "bg-black text-white border-black active:text-black active:bg-white hover:bg-gray-800 hover:text-white cursor-pointer"
+                  }`}
+                >
+                  {generating ? "Generating..." : "Generate"}
+                </button>
+              </p>
+              <textarea
+                className="w-full px-4 py-3 border rounded font-mono"
+                name="description"
+                value={data.description}
+                onChange={handleChange}
+                placeholder="Your description goes here (supports Markdown)"
+                rows={6}
+                required
+              />
+            </div>
           )}
           <p className="text-sm text-gray-500 mt-1">
             Supports Markdown: **bold**, *italic*, [links](url), etc.

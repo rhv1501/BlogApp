@@ -27,8 +27,8 @@ export async function POST(request) {
       authorImg: formData.get("authorImg"),
       image: imageUrl,
     };
-    await blogModel.create(blogData);
-    enqueueEmailJob(blogData);
+    const blog=await blogModel.create(blogData);
+    enqueueEmailJob(blog);
     console.log("blogData", blogData);
     return NextResponse.json(
       { success: "true", message: "Blog Added successfully" },

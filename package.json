@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@vercel/blob": "^1.1.1",
     "amqplib": "^0.10.8",
     "bcrypt": "^6.0.0",
