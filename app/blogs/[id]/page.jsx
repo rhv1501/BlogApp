@@ -127,7 +127,7 @@ export default async function BlogPage({ params }) {
         />
 
         <article>
-          <h2 className="my-8 text-[26px] font-semibold">Introduction</h2>
+          <h2 className="my-8 text-[26px] font-semibold">Blog</h2>
           <Markdown content={data.description} />
         </article>
 
