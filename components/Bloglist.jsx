@@ -40,6 +40,7 @@ const Bloglist = () => {
     "Devops",
     "AI",
     "Design",
+    "LifeStyle",
   ];
 
   if (loading) {

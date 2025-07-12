@@ -1,16 +1,10 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize from "rehype-sanitize";
 import "highlight.js/styles/github.css";
-import rehypeHighlight from "rehype-highlight";
 import Markdown from "@/components/Markdown";
 
 const UpdateBlog = () => {
@@ -237,6 +231,7 @@ const UpdateBlog = () => {
             <option value="Development">Development</option>
             <option value="Devops">Devops</option>
             <option value="Design">Design</option>
+            <option value="LifeStyle">LifeStyle</option>
           </select>
         </div>
 

@@ -335,6 +335,7 @@ const AddBlog = () => {
             <option value="Development">Development</option>
             <option value="Devops">Devops</option>
             <option value="Design">Design</option>
+            <option value="LifeStyle">LifeStyle</option>
           </select>
         </div>
 
