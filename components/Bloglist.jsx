@@ -38,7 +38,7 @@ const Bloglist = () => {
     "Technology",
     "Development",
     "Devops",
-    "AI",
+    "Ai",
     "Design",
     "LifeStyle",
   ];
