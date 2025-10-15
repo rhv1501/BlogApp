@@ -35,6 +35,7 @@ const AddBlog = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          token: localStorage.getItem("token") || "",
         },
         body: JSON.stringify({
           prompt: data.description,
@@ -101,6 +102,7 @@ const AddBlog = () => {
 
       const response = await fetch("/api/blog", {
         method: "POST",
+        headers: { token: localStorage.getItem("token") || "" },
         body: formData,
       });
 

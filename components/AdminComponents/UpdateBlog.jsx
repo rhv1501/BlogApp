@@ -107,6 +107,7 @@ const UpdateBlog = () => {
 
       const response = await fetch(`/api/blog?id=${id}`, {
         method: "PUT",
+        headers: { token: localStorage.getItem("token") || "" },
         body: formData,
       });
 

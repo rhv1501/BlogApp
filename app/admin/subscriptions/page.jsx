@@ -7,7 +7,10 @@ const page = () => {
   const [emails, setEmails] = useState([]);
   const fetchEmails = async () => {
     try {
-      const response = await fetch("/api/email");
+      const response = await fetch("/api/email", {
+        method: "GET",
+        headers: { token: localStorage.getItem("token") || "" },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch emails");
       }
@@ -41,7 +44,13 @@ const page = () => {
           <tbody>
             {emails.map((data) => {
               console.log(data);
-              return <Emailitems key={data._id} email={data.email} date={data.Date}/>;
+              return (
+                <Emailitems
+                  key={data._id}
+                  email={data.email}
+                  date={data.Date}
+                />
+              );
             })}
           </tbody>
         </table>

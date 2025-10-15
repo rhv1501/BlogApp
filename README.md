@@ -30,8 +30,10 @@ A modern, SEO-optimized blog application built with Next.js 15, featuring AI-pow
 
 - **OTP Authentication**: Secure admin login with email-based OTP
 - **JWT Tokens**: Secure session management with Jose library
+- **Protected API Routes**: Middleware-based API protection for sensitive operations
 - **Input Validation**: Protected against common vulnerabilities
 - **Environment Variables**: Secure configuration management
+- **Route-Based Security**: Method-specific API protection
 
 ### 📱 User Experience
 
@@ -76,7 +78,39 @@ npm install -g pnpm
 corepack enable
 ```
 
-## 🚀 Getting Started
+## � API Security
+
+The application implements a comprehensive API security system using Next.js middleware:
+
+### Protected Endpoints
+
+| Endpoint               | Method            | Protection | Description                                        |
+| ---------------------- | ----------------- | ---------- | -------------------------------------------------- |
+| `/api/blog`            | GET               | Public     | Anyone can read blog posts                         |
+| `/api/blog`            | POST, PUT, DELETE | Protected  | Only authenticated admins can modify blogs         |
+| `/api/email`           | GET               | Protected  | Only authenticated admins can view subscriber list |
+| `/api/email`           | POST              | Public     | Anyone can subscribe to the newsletter             |
+| `/api/ai/generateBlog` | POST              | Protected  | Only authenticated admins can generate AI content  |
+| `/admin/*`             | ALL               | Protected  | All admin panel routes require authentication      |
+
+### Authentication Flow
+
+1. Admin authenticates via email OTP at `/login/admin`
+2. JWT token is stored as a cookie upon successful authentication
+3. Middleware validates JWT token for all protected routes
+4. Unauthenticated requests to protected routes return 401/403 responses
+
+### Testing API Security
+
+You can test the API security implementation by accessing the test page at:
+
+```
+/test-api.html
+```
+
+This page allows you to test all protected endpoints with and without authentication.
+
+## �🚀 Getting Started
 
 ### 1. Clone the Repository
 

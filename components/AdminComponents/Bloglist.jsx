@@ -27,6 +27,7 @@ const page = () => {
     try {
       const response = await fetch(`/api/blog?id=${id}`, {
         method: "DELETE",
+        headers: { token: localStorage.getItem("token") || "" },
       });
       if (!response.ok) {
         throw new Error("Failed to delete blog");

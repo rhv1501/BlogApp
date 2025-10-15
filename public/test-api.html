@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Security Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      .endpoint {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .endpoint h3 {
+        margin-top: 0;
+      }
+      .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      button {
+        padding: 8px 15px;
+        cursor: pointer;
+        background-color: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      button:hover {
+        background-color: #0051a2;
+      }
+      pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        overflow: auto;
+        border-radius: 4px;
+        max-height: 200px;
+      }
+      #token-input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>API Security Test Page</h1>
+
+    <div>
+      <h2>JWT Token</h2>
+      <p>Paste your JWT token here to test authenticated endpoints:</p>
+      <input type="text" id="token-input" placeholder="Enter JWT token" />
+    </div>
+
+    <div class="endpoint">
+      <h3>Blog API</h3>
+      <div class="buttons">
+        <button onclick="testEndpoint('/api/blog', 'GET')">GET (Public)</button>
+        <button onclick="testEndpoint('/api/blog', 'POST')">
+          POST (Protected)
+        </button>
+        <button onclick="testEndpoint('/api/blog', 'PUT')">
+          PUT (Protected)
+        </button>
+        <button onclick="testEndpoint('/api/blog', 'DELETE')">
+          DELETE (Protected)
+        </button>
+      </div>
+      <pre id="blog-result">Results will appear here</pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>Email API</h3>
+      <div class="buttons">
+        <button onclick="testEndpoint('/api/email', 'GET')">
+          GET (Protected)
+        </button>
+        <button onclick="testEndpoint('/api/email', 'POST')">
+          POST (Public)
+        </button>
+      </div>
+      <pre id="email-result">Results will appear here</pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>AI Blog Generation API</h3>
+      <div class="buttons">
+        <button onclick="testEndpoint('/api/ai/generateBlog', 'POST')">
+          POST (Protected)
+        </button>
+      </div>
+      <pre id="ai-result">Results will appear here</pre>
+    </div>
+
+    <script>
+      async function testEndpoint(url, method) {
+        const token = document.getElementById("token-input").value;
+        const resultId = url.includes("blog")
+          ? url.includes("generateBlog")
+            ? "ai-result"
+            : "blog-result"
+          : "email-result";
+
+        try {
+          const headers = {
+            "Content-Type": "application/json",
+          };
+
+          if (token) {
+            // Add the token as a cookie
+            document.cookie = `token=${token}; path=/`;
+          }
+
+          // Set some dummy data for POST/PUT requests
+          let body = null;
+          if (method === "POST" || method === "PUT") {
+            if (url.includes("email")) {
+              body = new FormData();
+              body.append("email", "test@example.com");
+            } else if (url.includes("generateBlog")) {
+              body = JSON.stringify({
+                prompt: "Write a short blog about testing",
+              });
+            } else {
+              body = JSON.stringify({
+                title: "Test Blog",
+                content: "This is a test blog post.",
+              });
+            }
+          } else if (method === "DELETE") {
+            url += "?id=test123";
+          }
+
+          // Make the request
+          const options = { method, headers };
+          if (body && !(body instanceof FormData)) {
+            options.body = body;
+          }
+
+          const response = await fetch(url, options);
+          const data = await response.json();
+
+          document.getElementById(resultId).textContent =
+            `Status: ${response.status}\n` +
+            `Response: ${JSON.stringify(data, null, 2)}`;
+        } catch (error) {
+          document.getElementById(
+            resultId
+          ).textContent = `Error: ${error.message}`;
+        }
+      }
+    </script>
+  </body>
+</html>
